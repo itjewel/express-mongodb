@@ -1,0 +1,29 @@
+{
+  "name": "express-mongodb",
+  "version": "1.0.0",
+  "description": "node express",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itjewel/express-mongodb.git"
+  },
+  "keywords": [
+    "[express",
+    "Md.Jewel",
+    "Mia]"
+  ],
+  "author": "md.jewel mia <md.jewelmia52@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itjewel/express-mongodb/issues"
+  },
+  "homepage": "https://github.com/itjewel/express-mongodb#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19"
+  }
+}
