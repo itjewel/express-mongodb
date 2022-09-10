@@ -1,13 +1,14 @@
 var express = require('express')
 var app = express()
-const router = express.Router();
-app.use(router);
-app.use(express.json());
+// app.use(express.json());
+// app.use(express.raw());
+// app.use(express.text());
+app.use(express.urlencoded());
 
-router.get('/', (req, res)=>{
+app.get('/', (req, res)=>{
     res.send("this is a home page");
 })
-router.post('/', (req, res)=>{
+app.post('/', (req, res)=>{
     console.log(req.body)
     res.send("this is a post request page");
 })
