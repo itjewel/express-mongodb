@@ -10,7 +10,7 @@ app.param('id', function (req, res, next, id) {
     next()
   })
 app.get('/user/:id', (req,res)=>{
-    console.log(req.userDtails)
+    console.log(req.params)
     res.send("welcome tho home page");
 })
 
