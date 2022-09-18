@@ -15,9 +15,26 @@ app.get('/user/:id', (req,res)=>{
     res.send("welcome tho home page");
 })
 app.get('/views', (req,res)=>{
-  // see in header option it's set into the header
-  res.location('/user/:id')
-  res.end();
+  
+  res.format({
+    'text/plain': function () {
+      res.send('hey')
+    },
+  
+    'text/html': function () {
+      res.send('<p>hey</p>')
+    },
+  
+    'application/json': function () {
+      res.send({ message: 'hey' })
+    },
+  
+    default: function () {
+      // log the request and respond with 406
+      res.status(406).send('Not Acceptable')
+    }
+  })
+
  
 })
 adminRoute.get('/dashboard',(req,res)=>{

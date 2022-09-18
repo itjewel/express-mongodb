@@ -15,8 +15,8 @@ app.get('/user/:id', (req,res)=>{
     res.send("welcome tho home page");
 })
 app.get('/views', (req,res)=>{
-  // see in header option it's set into the header
-  res.location('/user/:id')
+  
+  res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true })
   res.end();
  
 })
