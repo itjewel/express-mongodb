@@ -6,26 +6,13 @@ const adminRouter = express.Router();
 app.use(cookieParser())
 app.use(express.json());
 
-const loggerWrapper = (options) => {
-  return function (req, res, next){
-  if(options.log){
-    console.log(`Admin Logger ${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${req.protocol} - ${req.ip}`)
-    next();  
-  }else{
-    throw new Error('This is an error');
-  }   
-  }
-
-}
- 
-
 // app.use(logger);
-// const logger = (req, res, next) => {
-//   console.log(`Admin Logger ${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${req.protocol} - ${req.ip}`)
-//   // next();
-//   throw new Error('This is an error');
-// }
-adminRouter.use(loggerWrapper({log: false}))
+const logger = (req, res, next) => {
+  console.log(`Admin Logger ${new Date(Date.now()).toLocaleString()} - ${req.method} - ${req.originalUrl} - ${req.protocol} - ${req.ip}`)
+  // next();
+  throw new Error('This is an error');
+}
+adminRouter.use(logger)
 
 
 app.post('/',(reqq,ress)=>{
