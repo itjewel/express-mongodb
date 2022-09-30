@@ -7,18 +7,15 @@ app.set('view engine','ejs')
 app.use(cookieParser())
 app.use(express.json());
 
-app.get('/', [
-  (req, res, next)=>{
-    fs.readFile('/maybe-valid-file', 'utf-8', (err, data) => {
-      res.locals.data = data
-      next(err)
-    })
-  },
-  (req, res)=>{
-    res.locals.data = res.locals.data.split(',')[1]
-    res.send(res.locals.data)
-  }
-])
+app.get('/', (req, res, next) => {
+  fs.readFileSync('/file-does-not-exist', (err, data) => {
+    if (err) {
+      next(err) // Pass errors to Express.
+    } else {
+      res.send(data)
+    }
+  })
+})
 
 app.use((req, res, next) => {
   next('Request url not found!');
@@ -35,10 +32,6 @@ app.use((err, req, res, next) => {
     }
   }
   })
-
-
-
-
 
 app.listen(3001, ()=>{
     console.log("listening on port 3001")

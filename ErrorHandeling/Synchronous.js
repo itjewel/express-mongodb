@@ -1,26 +1,25 @@
 var express = require('express')
 var cookieParser = require('cookie-parser')
-const fs = require('fs');
 const app = express();
 app.set('view engine','ejs')
 
 app.use(cookieParser())
 app.use(express.json());
 
-app.get('/', [
-  (req, res, next)=>{
-    fs.readFile('/maybe-valid-file', 'utf-8', (err, data) => {
-      res.locals.data = data
-      next(err)
-    })
-  },
-  (req, res)=>{
-    res.locals.data = res.locals.data.split(',')[1]
-    res.send(res.locals.data)
+app.get("/",(req,res,next)=>{
+  for(i=0; i<=10; i++){
+    if(i === 5){
+      next("nothing to do");
+    }else{
+      res.write('a');
+    }
+    // res.write('a');
   }
-])
+  res.end();
+})
 
 app.use((req, res, next) => {
+  // res.status(400).send.('Request url not found!')
   next('Request url not found!');
 })
 app.use((err, req, res, next) => {
@@ -35,9 +34,6 @@ app.use((err, req, res, next) => {
     }
   }
   })
-
-
-
 
 
 app.listen(3001, ()=>{
