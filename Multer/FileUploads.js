@@ -66,8 +66,12 @@ const upload = multer({ storage: storage,limits: {
 
 } })
 const cpUpload = upload.fields([{ name: 'avatar', maxCount: 3 }, { name: 'doc', maxCount: 1 }])
-app.post('/profile', cpUpload, function (req, res, next) {
-  console.log(req.files)
+app.post('/fileUpload', cpUpload, function (req, res, next) {
+    // multiple file uploads
+    // console.log(req.files)
+
+     // Single  file uploads
+    // console.log(req.file)
   // console.log(req.file, req.body)
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
