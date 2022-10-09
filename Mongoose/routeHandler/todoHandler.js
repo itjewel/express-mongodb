@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose')
 const router = express.Router();
 const todoSchema = require('../schemas/todoSchema');
-const Todo = new mongoose.model('todo', todoSchema)
+const checkLogin = require('../../middleware/checkLogin');
+const Todo = new mongoose.model('Todo', todoSchema)
 
-router.get('/', async (req,res) => {
+router.get('/',checkLogin, async (req,res) => {
+    console.log(req)
     // try {
     //   const resData =   await Todo.find({'status': 'active'});
     //     res.status(200).json({
@@ -36,6 +38,41 @@ router.get('/', async (req,res) => {
 //         console.log(docs)
 //     }
 //    });
+   
+});
+
+router.get('/instance',  async (req,res) => {
+    const todo = new Todo();
+
+    // Now we can call the function
+    // the `this` in the function referes to `dog`
+    const result = await todo.findActive();
+    // Will put out "dog"
+
+    // const todo = new Todo();
+    // const data =  todo.findActive();
+     res.status(200).json({
+        data: result
+    })
+
+   
+});
+
+router.get('/static',  async (req,res) => {
+    let result = await Todo.findByName('inactive');
+     res.status(200).json({
+        data: result
+    })
+
+   
+});
+
+router.get('/query',  async (req,res) => {
+    const result = await Todo.find().byName('inactive');
+     res.status(200).json({
+        data: result
+    })
+
    
 });
 
@@ -106,6 +143,11 @@ router.delete('/:id', async (req,res) => {
           })
       }
 });
+
+
+
+
+
 
 
 

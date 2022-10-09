@@ -3,7 +3,9 @@ var cookieParser = require('cookie-parser')
 const fs = require('fs');
 const app = express();
 const mongoose = require('mongoose')
+require('dotenv').config()
 const todoHandler = require('./Mongoose/routeHandler/todoHandler');
+const userHandler = require('./Mongoose/routeHandler/userHandler');
 
 app.use(cookieParser())
 app.use(express.json());
@@ -14,9 +16,10 @@ async function main() {
   await mongoose.connect('mongodb://localhost:27017/todos');
 }
 
-app.use('/todo',todoHandler)
+app.use('/todo',todoHandler);
+app.use('/user',userHandler);
 
-function errorHandler(err, req, res, next){
+const errorHandler  = (err, req, res, next) => {
   if(res.headersSent){
    return next(err)
   }
@@ -24,6 +27,7 @@ function errorHandler(err, req, res, next){
   // res.render('error', { error: err })
 } 
 
+app.use(errorHandler);
 
 
 app.listen(3001, ()=>{
