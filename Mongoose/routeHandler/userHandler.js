@@ -5,7 +5,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var jwt = require('jsonwebtoken');
 const userSchema = require('../schemas/userSchema');
-const User = new mongoose.model('User', userSchema)
+const User = new mongoose.model('User', userSchema);
+const todoSchema = require('../schemas/todoSchema');
+const Todo = new mongoose.model('Todo', todoSchema)
 
 router.post('/signup', async (req,res, next) => {
     try{
@@ -61,6 +63,27 @@ router.post('/login', async (req,res) => {
         })
     }
 });
+
+
+router.get('/all', async (req, res)=>{
+    try {
+//         const userR = await User.find({});
+
+//    const viewData =  await userR.execPopulate('todos'); // Doesn't work
+         const result  = await User.find({}).populate('todos');
+       
+       
+
+        res.status(200).json({
+            data: result
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: "no data get"
+        })
+    }
+        
+})
 
 
 module.exports = router;

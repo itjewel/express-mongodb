@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose')
 const router = express.Router();
-const todoSchema = require('../schemas/todoSchema');
+const userSchema = require('../schemas/userSchema');
 const checkLogin = require('../../middleware/checkLogin');
+const todoSchema = require('../schemas/todoSchema');
 const Todo = new mongoose.model('Todo', todoSchema)
+const User = new mongoose.model('User', userSchema)
 
 router.get('/',checkLogin, async (req,res) => {
     console.log(req)
@@ -38,6 +40,24 @@ router.get('/',checkLogin, async (req,res) => {
 //         console.log(docs)
 //     }
 //    });
+   
+});
+
+router.get('/populate',checkLogin, async (req,res) => {
+    try {
+        
+        const result  = await Todo.find({}).populate('user','name username');
+        res.status(200).json({
+            data: result
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: "no data get"
+        })
+        
+    }
+    
+
    
 });
 
@@ -89,23 +109,47 @@ router.get('/:id', async (req,res) => {
       }
 });
 
-router.post('/', async (req,res, next) => {
-    const newTodo = new Todo(req.body);
-    await newTodo.save((err)=>{
-        if(err){
-            res.status(500).json({
-                error: 'There was a serverside error'
-            })
-        }else{
-            res.status(200).json({
-                message: 'Todo was inserted successfully!'
-            })
-        }
-    });
+router.post('/',checkLogin, async (req,res, next) => {
+    const newTodo = new Todo({...req.body, user:req.userId});
+    try {
+     const result =  await newTodo.save();
+    //  await User.updateOne({_id:req.userId}, {
+    //     $push: {
+    //         todos: result._id,
+    //     }
+    //  })
+     const update = { $push: { todos: result._id }};
+     const updteResult = await User.updateOne({_id:req.userId}, update);
+    //  console.log(updteResult)
+
+     res.status(200).json({
+        message: updteResult
+    })
+     
+    } catch (error) {
+        res.status(500).json({
+            error: 'There was a serverside error'
+        })
+    }
+    
 });
 
-router.post('/all', async (req,res) => {
-    await Todo.insertMany(req.body,(err) =>{
+router.post('/all',checkLogin, async (req,res) => {
+    const newTodo = req.body;
+    // const reducer = req.body.reduce((pre, current)=>{
+    //     return {...pre,user:req.userId}
+ 
+    //  })
+    //   console.log(reducer)
+
+
+    const result = req.body.map((obj)=>{
+       return {...obj,user:req.userId}
+
+    })
+    //  console.log(result)
+    
+    await Todo.insertMany(result,(err) =>{
         if(err){
             res.status(500).json({
                 error: 'There was a serverside error'
